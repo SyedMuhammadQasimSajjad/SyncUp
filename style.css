@@ -8,7 +8,7 @@
     --sidebar-color: #1e1e1e;
 }
 
-    /*this is for all starting at 0*/
+/*this is for all starting at 0*/
 *{
     margin: 0;
     padding: 0;
@@ -19,8 +19,8 @@
 body{
     background-color: var(--bg-dark);
     background-image:
-radial-gradient(at 0% 0%, rgba(0, 188, 212, 0.15) 0px, transparent 50%),
-radial-gradient(at 100% 100%, rgba(156, 39, 176, 0.1) 0px, transparent 50%);
+            radial-gradient(at 0% 0%, rgba(0, 188, 212, 0.15) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(156, 39, 176, 0.1) 0px, transparent 50%);
     background-attachment: fixed;
     height: 100vh;
     overflow: auto;
@@ -69,8 +69,8 @@ body::after {
 }
 /*sidebar styling*/
 .sidebar{
-    width: 229vh;
-    height:200px;
+    width: 100%;
+    height:auto;
     background-color:var(--sidebar-color)  ;
     opacity: 0.75;
     backdrop-filter: blur(10px);
@@ -78,7 +78,6 @@ body::after {
     display: flex;
     border: 5px var(--accent-color);
     border-style: double;
-
     flex-direction: column;
 }
 .progress-container{
@@ -151,7 +150,7 @@ header p{
     padding: 15px;
     border-radius:10px;
     color:white;
-    outiline:none;
+    outline:none;
 }
 #add-task-button{
     background-color: var(--accent-color);
@@ -172,12 +171,12 @@ header p{
 }
 /*task cards*/
 .task-list{
-    background: rgba(18, 18, 18, 0.8); /* Halki translucent (transparent) look */
-    backdrop-filter: blur(10px); /* Glass effect */
-    border: 1px solid rgba(255, 255, 255, 0.05); /* Bohot halka border */
+    background: rgba(18, 18, 18, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 15px;
     padding: 20px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); /* Subtle Shadow */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     position: relative;
     display: flex;
@@ -191,12 +190,11 @@ header p{
     left: -50px;
     width: 100vh;
     height: 100vh;
-    background: #00bcd4; /* Cyan/AI color glow */
+    background: #00bcd4;
     border-radius: 50%;
     filter: blur(100px);
     opacity: 0.2;
-
-
+    pointer-events: none; /* 🔥 Fix: Isay clicks block nahi hongay */
 }
 .task-card{
     background:#1e1e1e;
@@ -206,21 +204,21 @@ header p{
     align-items: center;
     justify-content: space-between;
     gap:15px;
-    border-left:4px solid var(--accent-color);
-    border-right:4px solid var(--accent-color);
-    border-top:4px solid var(--accent-color);
-    border-bottom:4px solid var(--accent-color);
+    border: 1px solid var(--accent-color);
     transition: all 0.3s ease;
     animation: fadein 0.4s ease-in-out;
+    position: relative;
+    z-index: 5;
 }
 @keyframes fadein {
     from{opacity: 0;transform: translateY(10px)}
     to{opacity: 1;transform: translateY(0)}
 }
 
-.task-text{
+.task-title{
     flex:1;
     color:var(--text-main);
+    transition: all 0.3s ease;
 }
 .task-card:hover{
     background: #252525;
@@ -229,16 +227,19 @@ header p{
 .delete-icon{
     color:#cf6679;
     cursor: pointer;
+    position: relative;
+    z-index: 10;
 }
 .delete-icon:hover{
     color: #ff4d4d;
-    cursor: pointer;
 }
-.completed .task-title{
-    text-decoration: line-through;
-    opacity: 0.5;
-    transition: 1s;
+
+/* 🔥 CRITICAL BUGFIX SELECTOR: Ab strike-through 100% chalega */
+.completed .task-title {
+    text-decoration: line-through !important;
+    opacity: 0.4;
 }
+
 /*shapes ky liye*/
 .bg-blur-shapes{
     position: fixed;
@@ -278,13 +279,15 @@ header p{
 
 .task-check {
     position: relative;
-    z-index: 99; /* Isay sab se upar rakho */
+    z-index: 100;
     cursor: pointer;
-    pointer-events: auto !important; /* Force click */
+    width: 18px;
+    height: 18px;
+    pointer-events: auto !important;
 }
 
 .modal {
-    display: none; /* JS control karega */
+    display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
@@ -326,7 +329,6 @@ header p{
     transition: 0.3s;
 }
 
-/* Colors for Modal Buttons */
 .p-btn.low { background: #00bcd4; color: #000; }
 .p-btn.medium { background: #ffcc00; color: #000; }
 .p-btn.high { background: #ff4d4d; color: #fff; }
