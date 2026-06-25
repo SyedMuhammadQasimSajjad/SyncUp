@@ -106,21 +106,27 @@ function updateProgressBar(completed, total) {
     progressBar.style.width = percentage + "%";
 }
 
-// 6. Handle Clicks inside Task List
+// 6. 🛠️ CRITICAL AUDIT FIX: Handle Clicks inside Task List using Event Delegation
 taskList.addEventListener("click", (e) => {
     // TRASH ICON CLICK
-    if (e.target.classList.contains("delete-icon")) {
-        const id = e.target.getAttribute("data-id");
+    if (e.target.classList.contains("delete-icon") || e.target.closest(".delete-icon")) {
+        const targetIcon = e.target.classList.contains("delete-icon") ? e.target : e.target.closest(".delete-icon");
+        const id = targetIcon.getAttribute("data-id");
+
         fetch(`${API_URL}/${id}`, { method: "DELETE" })
             .then(res => res.json())
             .then(() => loadTasksFromServer())
             .catch(err => console.log(err));
+        return;
     }
 
-    // CHECKBOX CLICK
-    if (e.target.classList.contains("task-check")) {
-        const idToToggle = e.target.getAttribute("data-id");
-        const isChecked = e.target.checked;
+    // CHECKBOX CLICK (Using .closest() for precision checking)
+    const checkbox = e.target.closest(".task-check");
+    if (checkbox) {
+        const idToToggle = checkbox.getAttribute("data-id");
+        const isChecked = checkbox.checked; // Pull target live property
+
+        console.log("🔥 Request sending to server! ID:", idToToggle, "State:", isChecked);
         toggleTaskOnServer(idToToggle, isChecked);
     }
 });
@@ -130,7 +136,7 @@ taskInput.addEventListener("keypress", (e) => {
     if (e.key === 'Enter') addTask();
 });
 
-// 8. 🛠️ Audit Fix: Send PUT Request to save check state permanently in MongoDB
+// 8. Send PUT Request to save check state permanently in MongoDB
 function toggleTaskOnServer(id, isChecked) {
     fetch(`${API_URL}/${id}`, {
         method: "PUT",
