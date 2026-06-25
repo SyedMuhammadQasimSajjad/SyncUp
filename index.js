@@ -5,6 +5,9 @@ let tasks = [];
 let currentFilter = 'all';
 let pendingTaskText = "";
 
+// 🔗 RELATIVE URL: Jab frontend/backend aik hi jagah hon, toh localhost ya live url likhne ki zaroorat nahi hoti!
+const API_URL = "/api/tasks";
+
 // 1. Add Task Button logic
 function addTask() {
     const taskValue = taskInput.value.trim();
@@ -31,7 +34,7 @@ function finalizeTask(priority) {
         title: pendingTaskText,
         priority: priority
     };
-    fetch("http://localhost:3000/api/tasks", {
+    fetch(API_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -70,9 +73,11 @@ function renderTask() {
         if (task.completed) {
             taskCard.classList.add("completed");
         }
-        taskCard.innerHTML = `<input type="checkbox" class="task-check" data-id="${task.id}" ${task.completed ? 'checked' : ''}>
+        // ⚡ MongoDB ki ID _id hoti hai, isliye data-id="task._id" use kiya hai!
+        taskCard.innerHTML = `
+<input type="checkbox" class="task-check" data-id="${task._id}" ${task.completed ? 'checked' : ''}>
 <span class="task-title"> ${task.title}</span>
-<i class="fa-solid fa-trash delete-icon" data-id="${task.id}"></i>
+<i class="fa-solid fa-trash delete-icon" data-id="${task._id}"></i>
 `;
         taskList.appendChild(taskCard);
     });
@@ -109,21 +114,21 @@ function updateProgressBar(completed, total) {
 taskList.addEventListener("click", (e) => {
     // TRASH ICON CLICK
     if (e.target.classList.contains("delete-icon")) {
-        const id = Number(e.target.getAttribute("data-id"));
-        fetch(`http://localhost:3000/api/tasks/${id}`, {
+        const id = e.target.getAttribute("data-id"); // MongoDB ID string hoti hai, Number() hata diya
+        fetch(`${API_URL}/${id}`, {
             method: "DELETE"
         })
             .then(res => res.json())
             .then(data => {
                 console.log(data.message);
-                loadTasksFromServer(); // Delete hone ke baad server se list refresh karo
+                loadTasksFromServer();
             })
             .catch(err => console.log(err));
     }
 
     // CHECKBOX CLICK
     if (e.target.classList.contains("task-check")) {
-        const idToToggle = Number(e.target.getAttribute("data-id"));
+        const idToToggle = e.target.getAttribute("data-id");
         toggleTask(idToToggle);
     }
 });
@@ -136,10 +141,10 @@ taskInput.addEventListener("keypress", (e) => {
     }
 });
 
-// 8. Toggle Task Completion Status
+// 8. Toggle Task Completion Status (Abhi ke liye local UI level par status badlega)
 function toggleTask(id) {
     tasks = tasks.map(task => {
-        if (task.id === id) {
+        if (task._id === id) {
             return { ...task, completed: !task.completed };
         }
         return task;
@@ -160,7 +165,7 @@ document.querySelectorAll(".filter-btn").forEach(button => {
 
 // 10. Fetch Data From Server
 function loadTasksFromServer() {
-    fetch('http://localhost:3000/api/tasks')
+    fetch(API_URL)
         .then(res => res.json())
         .then(data => {
             console.log("server sy aya hua data", data);

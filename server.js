@@ -1,41 +1,63 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.static('.'));
 
-// 🔗 Standard URI — Note: mongodb.net ke baad ek dot (.) lagaya hai jo DNS resolve karwayega!
-const mongoURI = "mongodb+srv://syedmuhammadqasimsajjad3_db_user:dA8zgkfJ6RqWL7sp@cluster0.jsgxpq2.mongodb.net./?retryWrites=true&w=majority&appName=Cluster0";
+// Frontend files serve karne ke liye perfect tareeqa
+app.use(express.static(path.join(__dirname, '.')));
+
+// 🔗 MongoDB Connection String
+const mongoURI = "mongodb+srv://syedmuhammadqasimsajjad3_db_user:dA8zgkfJ6RqWL7sp@cluster0.jsgxpq2.mongodb.net/task_manager?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(mongoURI)
     .then(() => console.log("MongoDB Cloud se connection fit ho gaya hai! 🔥"))
     .catch((err) => console.log("Database connection mein masla aya:", err));
 
-let tasks = [];
+// 📝 MongoDB Task Schema aur Model (Kachra Array ki jagah Real DB!)
+const TaskSchema = new mongoose.Schema({
+    title: String,
+    priority: String
+});
+const Task = mongoose.model('Task', TaskSchema);
 
-app.get('/api/tasks', (req, res) => {
-    res.send(tasks);
+// 🌍 Main Route (Frontend file explicitly serve karne ke liye)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.post('/api/tasks', (req, res) => {
-    const newTask = {
-        id: tasks.length + 1,
-        title: req.body.title,
-        priority: req.body.priority,
-    };
-    tasks.push(newTask);
-    res.status(201).json({
-        message: 'Task created!',
-        task: newTask
-    });
+// 🔄 API Routes (Real MongoDB ke sath)
+app.get('/api/tasks', async (req, res) => {
+    try {
+        const tasks = await Task.find();
+        res.json(tasks);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.delete('/api/tasks/:id', (req, res) => {
-    const taskId = Number(req.params.id);
-    tasks = tasks.filter(task => task.id !== taskId);
-    res.json({ message: 'Task deleted successfully.' });
+app.post('/api/tasks', async (req, res) => {
+    try {
+        const newTask = new Task({
+            title: req.body.title,
+            priority: req.body.priority,
+        });
+        await newTask.save();
+        res.status(201).json({ message: 'Task created!', task: newTask });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/tasks/:id', async (req, res) => {
+    try {
+        await Task.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Task deleted successfully.' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.listen(PORT, () => {
