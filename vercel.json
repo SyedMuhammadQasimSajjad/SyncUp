@@ -8,6 +8,14 @@
   ],
   "routes": [
     {
+      "src": "/style.css",
+      "dest": "server.js"
+    },
+    {
+      "src": "/index.js",
+      "dest": "server.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "server.js"
     },
