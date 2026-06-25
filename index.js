@@ -58,7 +58,7 @@ function finalizeTask(priority) {
         .catch(err => console.log(err));
 }
 
-// 4. Render UI
+// 4. Render UI (🛠️ Fail-Proof Target Listening)
 function renderTask() {
     taskList.innerHTML = "";
     const filteredTasks = tasks.filter(task => {
@@ -74,10 +74,27 @@ function renderTask() {
         if (task.completed) taskCard.classList.add("completed");
 
         taskCard.innerHTML = `
-            <input type="checkbox" class="task-check" data-id="${task._id}" ${task.completed ? 'checked' : ''}>
+            <input type="checkbox" class="task-check" ${task.completed ? 'checked' : ''}>
             <span class="task-title"> ${task.title}</span>
-            <i class="fa-solid fa-trash delete-icon" data-id="${task._id}"></i>
+            <i class="fa-solid fa-trash delete-icon"></i>
         `;
+
+        // 🎯 Direct Checkbox Listener: Jab element banega, listener direct lag jayega
+        const checkbox = taskCard.querySelector(".task-check");
+        checkbox.addEventListener("change", (e) => {
+            console.log("🎯 Checkbox Changed Directly! State:", e.target.checked);
+            toggleTaskOnServer(task._id, e.target.checked);
+        });
+
+        // 🗑️ Direct Trash Listener
+        const deleteIcon = taskCard.querySelector(".delete-icon");
+        deleteIcon.addEventListener("click", () => {
+            fetch(`${API_URL}/${task._id}`, { method: "DELETE" })
+                .then(res => res.json())
+                .then(() => loadTasksFromServer())
+                .catch(err => console.log(err));
+        });
+
         taskList.appendChild(taskCard);
     });
 
@@ -105,31 +122,6 @@ function updateProgressBar(completed, total) {
     const percentage = Math.round((completed / total) * 100);
     progressBar.style.width = percentage + "%";
 }
-
-// 6. 🛠️ CRITICAL AUDIT FIX: Handle Clicks inside Task List using Event Delegation
-taskList.addEventListener("click", (e) => {
-    // TRASH ICON CLICK
-    if (e.target.classList.contains("delete-icon") || e.target.closest(".delete-icon")) {
-        const targetIcon = e.target.classList.contains("delete-icon") ? e.target : e.target.closest(".delete-icon");
-        const id = targetIcon.getAttribute("data-id");
-
-        fetch(`${API_URL}/${id}`, { method: "DELETE" })
-            .then(res => res.json())
-            .then(() => loadTasksFromServer())
-            .catch(err => console.log(err));
-        return;
-    }
-
-    // CHECKBOX CLICK (Using .closest() for precision checking)
-    const checkbox = e.target.closest(".task-check");
-    if (checkbox) {
-        const idToToggle = checkbox.getAttribute("data-id");
-        const isChecked = checkbox.checked; // Pull target live property
-
-        console.log("🔥 Request sending to server! ID:", idToToggle, "State:", isChecked);
-        toggleTaskOnServer(idToToggle, isChecked);
-    }
-});
 
 addtaskbtn.addEventListener("click", addTask);
 taskInput.addEventListener("keypress", (e) => {

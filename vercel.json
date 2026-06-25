@@ -16,7 +16,11 @@
       "dest": "server.js"
     },
     {
-      "src": "/api/(.*)",
+      "src": "/api/tasks/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/tasks",
       "dest": "server.js"
     },
     {
