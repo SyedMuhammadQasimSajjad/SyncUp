@@ -1,43 +1,41 @@
-# 📝 Live Task Manager Application (Full-Stack Grid Node)
+# 📝 SyncUp AI Dashboard
 
-A lightweight, asynchronous full-stack task management application engineered with a reactive frontend matrix and a decoupled backend processing engine. Fully configured for live cloud execution.
+A full-stack, responsive task management system engineered with a sleek dark theme matrix, adaptive category routing, and dynamic date rendering trackers.
 
-## 🚀 Live Environment Simulation
-🔗 **[Launch Live Task Manager App](https://task-manager-backend-five-alpha.vercel.app/)** *(Yahan agar Vercel ka exact URL mukhtalif hai toh apna sahi live deployment link check kar ke paste kar dena)*
-
----
-
-## 🛠️ System Architecture & Stack Layout
-
-The system utilizes structural separation to run asynchronous operations without window blocking frames:
-
-- **Frontend Client View:** Native HTML5 Document Object Model (DOM) structured with clean CSS3 layout viewports and responsive typography frameworks.
-- **Dynamic Logic Engine:** Native JavaScript (ES6) controlling client-side event loops, current execution runtime dates, and asynchronous transaction processes.
-- **Backend Routing Node:** Node.js backend architecture parsing requests via modern API parameters (`server.js` / `index.js`).
-- **Cloud Infrastructure Deployment:** Fully containerized for production routing workflows through Vercel serverless integration logic (`vercel.json`).
+## 🚀 Live Demo
+🔗 **[Launch Live SyncUp AI App](https://task-manager-backend-nu-ten.vercel.app/)**
 
 ---
 
-## ⚡ Core Engine Capabilities
-- **Non-Blocking Architecture:** Uses explicit asynchronous event handlers to render task insertions and deletions instantly without continuous page reloads.
-- **Environment Isolation:** Keeps absolute data paths and system constants isolated inside environmental wrappers (`.env`).
-- **State Display Matrix:** Features dynamic client-side synchronization protocols that match system tasks to explicit real-time calendar frames.
+## 🛠️ Tech Stack & Architecture
+
+- **Frontend Client:** Designed using modern dark-theme HTML5 components and custom CSS3 viewport matrices for real-time responsiveness.
+- **Dynamic Logic Layer:** Powered by native JavaScript (ES6) controlling dynamic greeting logs, structural category sorting, and interactive element updates.
+- **Backend Node Engine:** Hosted on a Node.js runtime infrastructure managing asynchronous script queries and API data routing efficiently.
+- **Cloud Infrastructure:** Integrated through dedicated deployment scripts and served globally using serverless nodes on Vercel.
 
 ---
 
-## 📂 System Installation & Local Execution
+## ⚡ Core Features
+- **Categorized Dashboard Matrix:** Built-in modular navigation fields separated into custom blocks: *All Task*, *Important (High)*, and *Completed*.
+- **Live State Tracker:** Interactive interface components providing immediate feedback on task progress tracking and current system metrics.
+- **Fluid Input Modules:** Optimized text placeholder engines with dynamic actions and interactive operational control loops.
 
-To download the repository packages and execute the development workspace on a local environment node:
+---
+
+## 📂 Installation & Local Setup
+
+To test and execute this project locally on your system node:
 
 ```bash
 # Clone the repository node
 git clone [https://github.com/SyedMuhammadQasimSajjad/task-manager-backend.git](https://github.com/SyedMuhammadQasimSajjad/task-manager-backend.git)
 
-# Enter the system root directory
+# Enter the system root folder
 cd task-manager-backend
 
-# Install the necessary dependency wrappers
+# Install package dependencies
 npm install
 
-# Initialize the local execution engine
+# Start the local server routing engine
 node server.js
