@@ -3,7 +3,7 @@
 A full-stack, responsive task management system engineered with a sleek dark theme matrix, adaptive category routing, and dynamic date rendering trackers.
 
 ## 🚀 Live Demo
-🔗 **[Launch Live SyncUp AI App](https://task-manager-backend-nu-ten.vercel.app/)**
+🔗 **[Launch Live SyncUp AI App](https://syncup-ai-dashboard.vercel.app/)**
 
 ---
 
@@ -29,10 +29,10 @@ To test and execute this project locally on your system node:
 
 ```bash
 # Clone the repository node
-git clone [https://github.com/SyedMuhammadQasimSajjad/task-manager-backend.git](https://github.com/SyedMuhammadQasimSajjad/task-manager-backend.git)
+git clone [https://github.com/SyedMuhammadQasimSajjad/SyncUp-AI-Dashboard.git](https://github.com/SyedMuhammadQasimSajjad/SyncUp-AI-Dashboard.git)
 
 # Enter the system root folder
-cd task-manager-backend
+cd SyncUp-AI-Dashboard
 
 # Install package dependencies
 npm install
